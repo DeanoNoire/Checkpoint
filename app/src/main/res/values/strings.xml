@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Checkpoint</string>
+    <string name="vstoupitButton">Vstoupit</string>
+    <string name="autorString">Daniel Rykala, UHK</string>
+</resources>
