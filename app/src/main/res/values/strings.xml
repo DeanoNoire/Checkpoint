@@ -3,6 +3,6 @@
     <string name="vstoupitButton">Vstoupit</string>
     <string name="autorString">Daniel Rykala, UHK</string>
     <string name="settingsActivityButton">Nastavení</string>
-    <string name="PripojeniButtonText">Připojení</string>
+    <string name="PripojeniButtonText">Upravit</string>
     <string name="pripojeniLabelText">Firma</string>
 </resources>

@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <activity android:name=".MainActivity">
 
             <intent-filter>
@@ -19,6 +21,13 @@
         </activity>
         <activity android:name=".MenuActivity"></activity>
         <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".PripojeniActivity"></activity>
+        <activity android:name=".ObchuzkyActivity"></activity>
+        <activity android:name=".UzivatelActivity"></activity>
+        <activity android:name=".TagyActivity"></activity>
     </application>
-
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
 </manifest>
