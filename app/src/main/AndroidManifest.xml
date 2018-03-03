@@ -24,10 +24,24 @@
         <activity android:name=".PripojeniActivity"></activity>
         <activity android:name=".ObchuzkyActivity"></activity>
         <activity android:name=".UzivatelActivity"></activity>
-        <activity android:name=".TagyActivity"></activity>
+        <activity android:name=".TagyActivity">
+                    <intent-filter>
+                            <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                            <category android:name="android.intent.category.DEFAULT" />
+                            <data   android:host="ext"
+                                    android:pathPrefix="/peterjohnwelcome.com:nfcapp"
+                                    android:scheme="vnd.android.nfc" />
+                    </intent-filter>
+        </activity>
+
     </application>
     <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="true" />
+
+
+
+
 </manifest>

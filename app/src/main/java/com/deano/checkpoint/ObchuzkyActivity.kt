@@ -25,6 +25,10 @@ class ObchuzkyActivity : AppCompatActivity() {
             startActivity(intent)
         })
 
+
+
+
+
     }
 
     override fun onResume() {
