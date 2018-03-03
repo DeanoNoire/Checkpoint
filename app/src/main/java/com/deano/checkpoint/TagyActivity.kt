@@ -29,11 +29,8 @@ class TagyActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tagy)
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this)
+        var vysledek : String?
 
-        ResetNFCButton.setOnClickListener({
-            Toast.makeText(this,"Resetováno",Toast.LENGTH_SHORT).show()
-
-        })
 
 
     }
@@ -55,7 +52,9 @@ class TagyActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         val messageWrittenSuccefully = NFCUtil.createNFCMessage(nfc1.text.toString(),intent)
-        nfc2.text = ifElse(messageWrittenSuccefully,"Successful written to tag","Chyba")
+        var vysledek = ifElse(messageWrittenSuccefully,"Zapsáno: "+nfc1.text.toString(),"Chyba")
+        Toast.makeText(this,vysledek,Toast.LENGTH_LONG).show()
+        finish()
     }
 
     fun<T> ifElse(condition: Boolean, primaryResult: T, secondaryResult: T) = if(condition) primaryResult else secondaryResult

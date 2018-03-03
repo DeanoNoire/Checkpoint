@@ -5,4 +5,5 @@
     <string name="settingsActivityButton">Nastavení</string>
     <string name="PripojeniButtonText">Upravit</string>
     <string name="pripojeniLabelText">Firma</string>
+    <string name="NFC_tip_1">Nejprve vyplňte název tagu a poté přiložte.</string>
 </resources>
