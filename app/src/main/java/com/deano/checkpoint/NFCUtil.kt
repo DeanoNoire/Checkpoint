@@ -46,6 +46,7 @@ object NFCUtil {
                             it?.let {
                                 predaniDat(it,textView,context)
                                 toastovani(context)
+                                FirebasePush.pushuj(context)
                                 return String(it)
                                 }
                         }

@@ -7,6 +7,7 @@ import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_obchuzky.*
 
 import android.nfc.NfcAdapter
+import com.google.firebase.database.FirebaseDatabase
 import java.util.*
 
 class ObchuzkyActivity : AppCompatActivity() {
@@ -14,7 +15,7 @@ class ObchuzkyActivity : AppCompatActivity() {
     private var mNfcAdapter: NfcAdapter? = null
     private var PRAZDNY = ""
     private var hodnota = ""
-    private var server_url = "http://192.168.1.1/"
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,9 +27,21 @@ class ObchuzkyActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("PRIPOJENI", Context.MODE_PRIVATE)
         userLabel.text = sharedPreferences.getString("User", PRAZDNY)
 
+
+        val database = FirebaseDatabase.getInstance().getReference()
+        val ref = database.child("Tagy")
+
+
+
         PrehlasitButton.setOnClickListener({
             val intent = Intent(this, UzivatelActivity::class.java)
             startActivity(intent)
+        })
+
+        button2.setOnClickListener({
+
+         FirebasePush.pushuj(this)
+
         })
     }
 

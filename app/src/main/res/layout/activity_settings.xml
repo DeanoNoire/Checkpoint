@@ -37,8 +37,8 @@
         android:id="@+id/eailLabel"
         android:layout_width="68dp"
         android:layout_height="24dp"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="24dp"
         android:text="Email:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/prihlasenJako" />
