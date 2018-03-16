@@ -6,24 +6,24 @@ package com.deano.checkpoint
 
 import android.app.Activity
 import android.app.PendingIntent
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.Ndef
 import android.nfc.tech.NdefFormatable
+import android.widget.TextView
+import android.widget.Toast
 import java.io.IOException
+import java.util.*
 
-/**
- * Created by PJ Welcome on 2017/07/08 in NFCApp.
- */
+
 object NFCUtil {
 
     fun createNFCMessage(payload: String, intent: Intent?): Boolean {
 
-        val pathPrefix = "peterjohnwelcome.com:nfcapp"
+        val pathPrefix = "deano.com:nfcapp"
         val nfcRecord = NdefRecord(NdefRecord.TNF_EXTERNAL_TYPE, pathPrefix.toByteArray(), ByteArray(0), payload.toByteArray())
         val nfcMessage = NdefMessage(arrayOf(nfcRecord))
         intent?.let {
@@ -31,30 +31,73 @@ object NFCUtil {
             return writeMessageToTag(nfcMessage, tag)
         }
         return false
+
+       // val sharedPreferences = getSharedPreferences("PRIPOJENI", Context.MODE_PRIVATE)
     }
 
-    fun retrieveNFCMessage(intent: Intent?): String {
+   fun retrieveNFCMessage(intent: Intent?, textView: TextView,context: Context): String {
         intent?.let {
             if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
+
                 val nDefMessages = getNDefMessages(intent)
                 nDefMessages[0].records?.let {
                     it.forEach {
                         it?.payload.let {
                             it?.let {
+                                predaniDat(it,textView,context)
+                                toastovani(context)
                                 return String(it)
-
-                            }
+                                }
                         }
                     }
                 }
 
             } else {
-                return "Touch NFC tag to read data"
+                return ""
             }
         }
-        return "Touch NFC tag to read data"
+        return ""
     }
 
+   private fun toastovani(context: Context) {
+        val sharedPreferences = context.getSharedPreferences("PRIPOJENI", Context.MODE_PRIVATE)
+        val tag = sharedPreferences.getString("Tag", "")
+        val time = sharedPreferences.getString("Time", "")
+        val user = sharedPreferences.getString("User", "")
+        val email = sharedPreferences.getString("Email", "")
+        val o1 = " "
+        val zprava = tag + o1 + time + o1 + user + o1 + email
+        Toast.makeText(context, zprava, Toast.LENGTH_LONG).show()
+    }
+
+   fun predaniDat(it: ByteArray, textView: TextView,context: Context) {
+        val sharedPreferences = context.getSharedPreferences("PRIPOJENI", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("Tag",String(it))
+        editor.putString("Time", ziskaniCasu(textView))
+        editor.apply()
+    }
+
+   fun cas() : String {
+        var timezone = TimeZone.getTimeZone("CET")
+        var cal = Calendar.getInstance(timezone)
+        var den = cal.get(Calendar.DAY_OF_MONTH).toString()
+        var mesic = (cal.get(Calendar.MONTH)+1).toString()
+        var rok = cal.get(Calendar.YEAR).toString()
+        var hod = cal.get(Calendar.HOUR).toString()
+        var min = cal.get(Calendar.MINUTE).toString()
+        val o1 = "."
+        val o2 = ":"
+        val o3 = " "
+        return den +o1+ mesic +o1+ rok +o3+ hod +o2+ min
+    }
+
+   fun ziskaniCasu(textView: TextView) : String {
+
+       var hodnota = cas()
+        textView.text = hodnota
+       return hodnota
+    }
 
     private fun getNDefMessages(intent: Intent): Array<NdefMessage> {
 
@@ -85,7 +128,6 @@ object NFCUtil {
 
         nfcAdapter.enableForegroundDispatch(activity, pendingIntent, filters, TechLists)
     }
-
 
     private fun writeMessageToTag(nfcMessage: NdefMessage, tag: Tag?): Boolean {
 
@@ -131,4 +173,10 @@ object NFCUtil {
         }
         return false
     }
+
+
+   
+
+
+
 }
