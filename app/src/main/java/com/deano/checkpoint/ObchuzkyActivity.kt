@@ -38,11 +38,7 @@ class ObchuzkyActivity : AppCompatActivity() {
             startActivity(intent)
         })
 
-        button2.setOnClickListener({
 
-         FirebasePush.pushuj(this)
-
-        })
     }
 
     override fun onResume() {

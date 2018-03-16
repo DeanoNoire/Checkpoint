@@ -14,20 +14,21 @@ import android.nfc.Tag
 import android.nfc.tech.Ndef
 import android.nfc.tech.NdefFormatable
 import android.widget.TextView
-import android.widget.Toast
 import java.io.IOException
 import java.util.*
 
 
 object NFCUtil {
 
-    fun createNFCMessage(payload: String, intent: Intent?): Boolean {
+    fun createNFCMessage(payload: String, intent: Intent?,context: Context): Boolean {
 
         val pathPrefix = "deano.com:nfcapp"
         val nfcRecord = NdefRecord(NdefRecord.TNF_EXTERNAL_TYPE, pathPrefix.toByteArray(), ByteArray(0), payload.toByteArray())
         val nfcMessage = NdefMessage(arrayOf(nfcRecord))
         intent?.let {
             val tag = it.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)
+            predaniDatDva(payload,context)
+            FirebasePush.pushujUdalost(context)
             return writeMessageToTag(nfcMessage, tag)
         }
         return false
@@ -45,8 +46,7 @@ object NFCUtil {
                         it?.payload.let {
                             it?.let {
                                 predaniDat(it,textView,context)
-                                toastovani(context)
-                                FirebasePush.pushuj(context)
+                                FirebasePush.pushujLog(context)
                                 return String(it)
                                 }
                         }
@@ -60,15 +60,12 @@ object NFCUtil {
         return ""
     }
 
-   private fun toastovani(context: Context) {
+    fun predaniDatDva(it: String,context: Context) {
         val sharedPreferences = context.getSharedPreferences("PRIPOJENI", Context.MODE_PRIVATE)
-        val tag = sharedPreferences.getString("Tag", "")
-        val time = sharedPreferences.getString("Time", "")
-        val user = sharedPreferences.getString("User", "")
-        val email = sharedPreferences.getString("Email", "")
-        val o1 = " "
-        val zprava = tag + o1 + time + o1 + user + o1 + email
-        Toast.makeText(context, zprava, Toast.LENGTH_LONG).show()
+        val editor = sharedPreferences.edit()
+        editor.putString("Tag",it)
+        editor.putString("Time", cas())
+        editor.apply()
     }
 
    fun predaniDat(it: ByteArray, textView: TextView,context: Context) {
@@ -78,27 +75,28 @@ object NFCUtil {
         editor.putString("Time", ziskaniCasu(textView))
         editor.apply()
     }
+    fun ziskaniCasu(textView: TextView) : String {
+
+        val hodnota = cas()
+        textView.text = hodnota
+        return hodnota
+    }
 
    fun cas() : String {
-        var timezone = TimeZone.getTimeZone("CET")
-        var cal = Calendar.getInstance(timezone)
-        var den = cal.get(Calendar.DAY_OF_MONTH).toString()
-        var mesic = (cal.get(Calendar.MONTH)+1).toString()
-        var rok = cal.get(Calendar.YEAR).toString()
-        var hod = cal.get(Calendar.HOUR).toString()
-        var min = cal.get(Calendar.MINUTE).toString()
+       val timezone = TimeZone.getTimeZone("CET")
+       val cal = Calendar.getInstance(timezone)
+       val den = cal.get(Calendar.DAY_OF_MONTH).toString()
+       val mesic = (cal.get(Calendar.MONTH)+1).toString()
+       val rok = cal.get(Calendar.YEAR).toString()
+       val hod = cal.get(Calendar.HOUR).toString()
+       val min = cal.get(Calendar.MINUTE).toString()
         val o1 = "."
         val o2 = ":"
         val o3 = " "
         return den +o1+ mesic +o1+ rok +o3+ hod +o2+ min
     }
 
-   fun ziskaniCasu(textView: TextView) : String {
 
-       var hodnota = cas()
-        textView.text = hodnota
-       return hodnota
-    }
 
     private fun getNDefMessages(intent: Intent): Array<NdefMessage> {
 

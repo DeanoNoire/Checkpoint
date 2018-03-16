@@ -9,7 +9,7 @@ import com.google.firebase.database.FirebaseDatabase
 object FirebasePush {
 
 
-  fun pushuj(context: Context){
+  fun pushujLog(context: Context){
 
         var PRAZDNY = ""
         val database = FirebaseDatabase.getInstance().getReference()
@@ -20,11 +20,29 @@ object FirebasePush {
     val tag = sharedPreferences.getString("Tag",PRAZDNY)
     val user = sharedPreferences.getString("User",PRAZDNY)
     val firma = sharedPreferences.getString("Firma",PRAZDNY)
-    val komentar = ""
 
-    val data = DataClass.Log(timeStamp,tag,komentar,user,firma)
+    val data = DataClass.Log(timeStamp,tag,user,firma)
     val key = ref.child(firma).push().key
     ref.child(firma).child(key).setValue(data)
+
+    }
+
+    fun pushujUdalost(context: Context){
+
+        var PRAZDNY = ""
+        val database = FirebaseDatabase.getInstance().getReference()
+        val ref = database.child("Tagy")
+        val sharedPreferences = context.getSharedPreferences("PRIPOJENI", Context.MODE_PRIVATE)
+
+        val timeStamp = sharedPreferences.getString("Time",PRAZDNY)
+        val tag = sharedPreferences.getString("Tag",PRAZDNY)
+        val user = sharedPreferences.getString("User",PRAZDNY)
+        val firma = sharedPreferences.getString("Firma",PRAZDNY)
+        val komentar = "Tag přepsán"
+
+        val data = DataClass.Udalost(timeStamp,tag,komentar,user,firma)
+        val key = ref.child(firma).push().key
+        ref.child(firma).child(key).setValue(data)
 
     }
 }

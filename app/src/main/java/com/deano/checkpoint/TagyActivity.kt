@@ -51,7 +51,7 @@ class TagyActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        val messageWrittenSuccefully = NFCUtil.createNFCMessage(nfc1.text.toString(),intent)
+        val messageWrittenSuccefully = NFCUtil.createNFCMessage(nfc1.text.toString(),intent,this)
         var vysledek = ifElse(messageWrittenSuccefully,"Zapsáno: "+nfc1.text.toString(),"Chyba")
         Toast.makeText(this,vysledek,Toast.LENGTH_LONG).show()
         finish()
